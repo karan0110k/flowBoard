@@ -17,7 +17,7 @@ export default async function BoardsPage() {
       <FlowBoardNavbar user={user} />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <BoardsPageClient boards={boards} />
+        <BoardsPageClient boards={boards} isAuthenticated={!!user} />
       </div>
     </div>
   );

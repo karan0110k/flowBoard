@@ -15,7 +15,7 @@ export default async function TemplatesPage() {
       <FlowBoardNavbar user={user} />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <TemplatesPageClient />
+        <TemplatesPageClient isAuthenticated={!!user} />
       </div>
     </div>
   );

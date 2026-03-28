@@ -160,6 +160,21 @@ export const templates: TemplateDefinition[] = [
     ],
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1000&auto=format&fit=crop",
   },
+  {
+    id: "gtd-productivity",
+    title: "GTD Productivity System",
+    category: "Productivity",
+    description: "Implement the Getting Things Done method to organize your tasks and mind.",
+    background: "from-fuchsia-600/90 to-purple-800/90",
+    icon: "⚡",
+    defaultLists: [
+      { title: "Inbox", cards: ["Dump ideas here", "Schedule dentist appointment", "Reply to Sarah's email"] },
+      { title: "Next Actions", cards: ["Draft Q3 report", "Buy groceries", "Call mom"] },
+      { title: "Waiting On", cards: ["Approval from design team", "Package delivery"] },
+      { title: "Someday/Maybe", cards: ["Learn Spanish", "Travel to Japan"] },
+    ],
+    image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1000&auto=format&fit=crop",
+  },
 ];
 
 export const popularTemplates = [
@@ -178,4 +193,5 @@ export const featuredCategories = [
   { name: "Project Management", icon: "📋", color: "from-violet-500/70 to-purple-700/70", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000&auto=format&fit=crop" },
   { name: "Remote Work", icon: "🏠", color: "from-teal-500/70 to-teal-700/70", image: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?q=80&w=1000&auto=format&fit=crop" },
   { name: "Production", icon: "🚀", color: "from-slate-600 to-slate-800", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop" },
+  { name: "Productivity", icon: "⚡", color: "from-fuchsia-500/70 to-fuchsia-700/70", image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1000&auto=format&fit=crop" },
 ];

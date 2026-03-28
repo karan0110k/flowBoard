@@ -4,13 +4,14 @@
 import Link from "next/link";
 import { Clock, ChevronDown, Plus } from "lucide-react";
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { popularTemplates } from "@/src/data/templates";
 import CreateBoardModal from "@/src/components/modal/CreateBoardModal";
 
-export default function BoardsPageClient({ boards }: { boards: any[] }) {
+export default function BoardsPageClient({ boards, isAuthenticated }: { boards: any[]; isAuthenticated: boolean }) {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const searchParams = useSearchParams();
+  const router = useRouter();
   const query = (searchParams.get("q") || "").toLowerCase();
 
   const filteredBoards = query
@@ -89,7 +90,10 @@ export default function BoardsPageClient({ boards }: { boards: any[] }) {
 
           {!query && (
             <button
-              onClick={() => setShowCreateModal(true)}
+              onClick={() => {
+                if (!isAuthenticated) return router.push('/login');
+                setShowCreateModal(true);
+              }}
               className="h-24 rounded-lg flex items-center justify-center bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-medium cursor-pointer"
             >
               <Plus className="h-4 w-4 mr-1.5" />

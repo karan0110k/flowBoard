@@ -6,7 +6,7 @@ import { templates, templateCategories, featuredCategories, TemplateDefinition }
 import { createBoardFromTemplate } from "@/src/lib/actions";
 import { useRouter } from "next/navigation";
 
-export default function TemplatesPageClient() {
+export default function TemplatesPageClient({ isAuthenticated }: { isAuthenticated: boolean }) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -20,6 +20,10 @@ export default function TemplatesPageClient() {
   });
 
   const handleUseTemplate = (template: TemplateDefinition) => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
     setLoadingId(template.id);
     startTransition(async () => {
       const board = await createBoardFromTemplate(template.title, template.description, template.defaultLists, template.image);
