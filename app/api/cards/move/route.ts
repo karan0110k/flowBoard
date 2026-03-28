@@ -77,7 +77,22 @@ export async function PATCH(req: Request) {
         orderBy: { position: "asc" }
       });
       const updatedDest = [...destCards];
-      updatedDest.splice(newPosition, 0, { ...card, listId: destListId } as any);
+      type TempCard = {
+  id: string;
+  title: string;
+  description: string | null;
+  listId: string;
+  position: number;
+  dueDate: Date | null;
+  archived: boolean;
+};
+
+const updatedDest: TempCard[] = [...destCards];
+
+updatedDest.splice(newPosition, 0, {
+  ...card,
+  listId: destListId,
+});
       
       const destUpdates = updatedDest.map((c, index) =>
         prisma.card.update({
