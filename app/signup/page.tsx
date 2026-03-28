@@ -21,7 +21,7 @@ export default function SignupPage() {
             <p className="text-3xl font-bold text-white leading-tight drop-shadow-lg">
               "Joining FlowBoard was the best decision for our workflow. We can finally see the big picture."
             </p>
-            <footer className="text-gray-300 font-medium">— Michael R., Creative Director</footer>
+            <footer className="text-gray-300 font-medium">— Aaditi V., Creative Director</footer>
           </blockquote>
         </div>
       </div>

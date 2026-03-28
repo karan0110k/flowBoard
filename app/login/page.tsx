@@ -21,7 +21,7 @@ export default function LoginPage() {
             <p className="text-3xl font-bold text-white leading-tight drop-shadow-lg">
               "FlowBoard has revolutionized how our team tracks progress. It's beautiful, fast, and exactly what we needed."
             </p>
-            <footer className="text-gray-300 font-medium">— Sarah J., Product Manager</footer>
+            <footer className="text-gray-300 font-medium">— Karan K., Product Manager</footer>
           </blockquote>
         </div>
       </div>
