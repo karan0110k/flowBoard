@@ -8,6 +8,14 @@ import { useState, useCallback, useRef, useEffect, useTransition } from "react";
 import { getNotifications, markNotificationAsRead, markAllNotificationsAsRead } from "@/src/lib/actions";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
+interface Notification {
+  id: string;
+  text: string;
+  link?: string;
+  read: boolean;
+  createdAt: string | Date;
+}
+
 export default function FlowBoardNavbar({ user }: { user?: { name: string; email: string } | null }) {
   const initial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
   const router = useRouter();
@@ -16,11 +24,10 @@ export default function FlowBoardNavbar({ user }: { user?: { name: string; email
   const [searchValue, setSearchValue] = useState(searchParams.get("q") || "");
   const [isFocused, setIsFocused] = useState(false);
   const [activePopup, setActivePopup] = useState<'notifications' | 'help' | 'profile' | null>(null);
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [showAbout, setShowAbout] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const popupRef = useRef<HTMLDivElement>(null);
   const helpRef = useRef<HTMLDivElement>(null);
@@ -51,7 +58,6 @@ export default function FlowBoardNavbar({ user }: { user?: { name: string; email
     const keyHandler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setActivePopup(null);
-        setShowAbout(false);
         setShowShortcuts(false);
       }
       if (e.key === "?" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
@@ -181,7 +187,7 @@ export default function FlowBoardNavbar({ user }: { user?: { name: string; email
               </div>
               <div className="overflow-y-auto custom-scrollbar flex-1">
                 {notifications.length > 0 ? (
-                  notifications.map((n: any) => (
+                  notifications.map((n: Notification) => (
                     <div 
                       key={n.id} 
                       onClick={() => { if(!n.read) markNotificationAsRead(n.id); if(n.link) router.push(n.link); setActivePopup(null); }}
@@ -198,7 +204,7 @@ export default function FlowBoardNavbar({ user }: { user?: { name: string; email
                         <Bell className="h-6 w-6 text-gray-600" />
                     </div>
                     <p className="text-sm font-medium text-gray-400">No new notifications</p>
-                    <p className="text-xs text-gray-600 mt-1">We'll let you know when something important happens.</p>
+                    <p className="text-xs text-gray-600 mt-1">We&apos;ll let you know when something important happens.</p>
                   </div>
                 )}
               </div>
@@ -237,7 +243,7 @@ export default function FlowBoardNavbar({ user }: { user?: { name: string; email
                 <span className="text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-gray-400">?</span>
               </button>
               <button 
-                onClick={() => { setShowAbout(true); setActivePopup(null); }} 
+                onClick={() => { setActivePopup(null); }} 
                 className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-white/10 transition-colors cursor-pointer"
               >
                 About FlowBoard

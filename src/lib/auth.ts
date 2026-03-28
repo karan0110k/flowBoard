@@ -4,7 +4,13 @@ import { cookies } from "next/headers";
 const secretKey = process.env.JWT_SECRET || "flowboard-super-secret-key-12345";
 const key = new TextEncoder().encode(secretKey);
 
-export async function encrypt(payload: any) {
+interface SessionPayload {
+  userId: string;
+  expires: Date | string;
+  [key: string]: any;
+}
+
+export async function encrypt(payload: SessionPayload) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -12,13 +18,13 @@ export async function encrypt(payload: any) {
     .sign(key);
 }
 
-export async function decrypt(input: string): Promise<any> {
+export async function decrypt(input: string): Promise<SessionPayload | null> {
   try {
     const { payload } = await jwtVerify(input, key, {
       algorithms: ["HS256"],
     });
-    return payload;
-  } catch (error) {
+    return payload as unknown as SessionPayload;
+  } catch (_error) {
     return null;
   }
 }
