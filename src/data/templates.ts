@@ -20,6 +20,7 @@ export const templateCategories = [
   "Project Management",
   "Personal",
   "Productivity",
+  "Remote Work",
 ] as const;
 
 export const templates: TemplateDefinition[] = [
@@ -105,6 +106,34 @@ export const templates: TemplateDefinition[] = [
       { title: "In Progress", cards: ["Product launch video", "Landing page copy"] },
       { title: "In Review", cards: ["Press release draft", "Ad creatives"] },
       { title: "Published", cards: ["January newsletter", "Product announcement"] },
+    ],
+  },
+  {
+    id: "classroom-management",
+    title: "Classroom Management",
+    category: "Education",
+    description: "Organize lesson plans, assignments, and student progress in one place.",
+    background: "from-teal-600/90 to-emerald-700/90",
+    icon: "📚",
+    defaultLists: [
+      { title: "Lesson Plans", cards: ["Unit 1: Introduction", "Unit 2: Core Concepts", "Unit 3: Advanced Topics"] },
+      { title: "Assignments", cards: ["Week 1 Quiz", "Midterm Project", "Final Essay"] },
+      { title: "Student Progress", cards: ["Grade submissions", "Feedback sessions", "Parent-teacher meetings"] },
+      { title: "Resources", cards: ["Textbook PDFs", "Video lectures", "Online tools"] },
+    ],
+  },
+  {
+    id: "remote-team-hub",
+    title: "Remote Team Hub",
+    category: "Remote Work",
+    description: "Centralize communication, projects, and social activities for distributed teams.",
+    background: "from-cyan-600/90 to-blue-800/90",
+    icon: "🏠",
+    defaultLists: [
+      { title: "Announcements", cards: ["Company news", "Upcoming deadlines", "New teammates"] },
+      { title: "Active Projects", cards: ["Project Alpha", "Project Beta", "System maintenance"] },
+      { title: "Meeting Notes", cards: ["Monday Sync", "Tech deep-dive", "Design review"] },
+      { title: "Social", cards: ["Virtual coffee", "Game night", "Kudos board"] },
     ],
   },
 ];

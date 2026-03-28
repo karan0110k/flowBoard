@@ -304,11 +304,8 @@ export async function getNotifications() {
   const session = await getSession();
   if (!session) return [];
   
-  // Diagnostic logging
-  if (!(prisma as any).notification) {
-    console.error("DEBUG: prisma.notification is missing!");
-    console.error("DEBUG: Available prisma models:", Object.keys(prisma).filter(k => !k.startsWith("_")));
-  }
+  const user = await prisma.user.findUnique({ where: { id: session.userId } });
+  const userName = user?.name || "User";
 
   let dbNotifications: any[] = [];
   try {
@@ -318,31 +315,31 @@ export async function getNotifications() {
       take: 20
     });
   } catch (error) {
-    console.error("DEBUG: Failed to fetch notifications:", error);
+    console.error("Failed to fetch notifications:", error);
   }
 
   if (dbNotifications.length === 0) {
     return [
       {
+        id: "welcome-sample",
+        text: `Welcome ${userName} to FlowBoard! 🚀`,
+        link: "/dashboard",
+        read: false,
+        createdAt: new Date(),
+      },
+      {
         id: "sample-1",
-        text: "You were added to 'My Tasks' board",
+        text: "You were added to 'Project Management' board",
         link: "/dashboard",
         read: false,
         createdAt: new Date(Date.now() - 1000 * 60 * 60 * 0.5),
       },
       {
         id: "sample-2",
-        text: "Rahul assigned you to 'Prepare presentation'",
+        text: "Team member assigned you to a new task",
         link: "/dashboard",
         read: false,
         createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5),
-      },
-      {
-        id: "sample-3",
-        text: "Card 'Deploy backend' is due tomorrow",
-        link: "/dashboard",
-        read: true,
-        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
       }
     ];
   }

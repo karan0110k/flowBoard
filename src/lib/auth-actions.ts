@@ -19,6 +19,9 @@ export async function login(formData: FormData) {
       demoUser = await prisma.user.create({
         data: { name: "Demo User", email, password: hashedPassword },
       });
+      // Add welcome notification for new demo user
+      const { createNotification } = await import("./actions");
+      await createNotification(demoUser.id, `Welcome ${demoUser.name} to FlowBoard! 🚀`, "/dashboard");
     }
   }
 
@@ -49,6 +52,10 @@ export async function signup(formData: FormData) {
   const user = await prisma.user.create({
     data: { name, email, password: hashedPassword },
   });
+
+  // Add welcome notification
+  const { createNotification } = await import("./actions");
+  await createNotification(user.id, `Welcome ${name} to FlowBoard! 🚀`, "/dashboard");
 
   await createSession(user.id);
   redirect("/dashboard");
