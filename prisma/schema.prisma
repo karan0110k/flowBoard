@@ -1,0 +1,219 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id         String     @id @default(uuid())
+  email      String     @unique
+  password   String
+  name       String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  boards     Board[]
+  comments      Comment[]
+  activities    Activity[]
+  notifications Notification[]
+}
+
+model Board {
+  id          String   @id @default(uuid())
+  title       String
+  description String?  @db.Text
+  background  String?
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lists      List[]
+  members    BoardMember[]
+  activities Activity[]
+}
+
+model List {
+  id        String   @id @default(uuid())
+  boardId   String
+  title     String
+  position  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  board Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  cards Card[]
+
+  @@index([boardId])
+}
+
+model Card {
+  id          String    @id @default(uuid())
+  listId      String
+  title       String
+  description String?   @db.Text
+  cover       String?
+  dueDate     DateTime?
+  archived    Boolean   @default(false)
+  position    Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  list        List         @relation(fields: [listId], references: [id], onDelete: Cascade)
+  members     CardMember[]
+  labels      CardLabel[]
+  checklists  Checklist[]
+  attachments Attachment[]
+  comments    Comment[]
+  activities  Activity[]
+
+  @@index([listId])
+}
+
+model Member {
+  id        String   @id @default(uuid())
+  name      String
+  email     String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  boards BoardMember[]
+  cards  CardMember[]
+}
+
+model BoardMember {
+  boardId   String
+  memberId  String
+  createdAt DateTime @default(now())
+
+  board  Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@id([boardId, memberId])
+  @@index([boardId])
+  @@index([memberId])
+}
+
+model CardMember {
+  cardId    String
+  memberId  String
+  createdAt DateTime @default(now())
+
+  card   Card   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@id([cardId, memberId])
+  @@index([cardId])
+  @@index([memberId])
+}
+
+model Label {
+  id        String   @id @default(uuid())
+  text      String
+  color     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cards CardLabel[]
+}
+
+model CardLabel {
+  cardId    String
+  labelId   String
+  createdAt DateTime @default(now())
+
+  card  Card  @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  label Label @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@id([cardId, labelId])
+  @@index([cardId])
+  @@index([labelId])
+}
+
+model Checklist {
+  id        String   @id @default(uuid())
+  cardId    String
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  card  Card            @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  items ChecklistItem[]
+
+  @@index([cardId])
+}
+
+model ChecklistItem {
+  id          String   @id @default(uuid())
+  checklistId String
+  text        String
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  checklist Checklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+
+  @@index([checklistId])
+}
+
+model Attachment {
+  id        String   @id @default(uuid())
+  cardId    String
+  name      String
+  url       String
+  type      String
+  createdAt DateTime @default(now())
+
+  card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@index([cardId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  cardId    String
+  userId    String
+  text      String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([cardId])
+  @@index([userId])
+}
+
+model Activity {
+  id        String   @id @default(uuid())
+  cardId    String?
+  boardId   String
+  userId    String
+  type      String
+  content   String?  @db.Text
+  createdAt DateTime @default(now())
+
+  card  Card? @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([cardId])
+  @@index([boardId])
+  @@index([userId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  text      String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
