@@ -218,12 +218,13 @@ export async function updateCardDueDate(cardId: string, dueDate: string | null, 
 export async function createBoardFromTemplate(
   title: string,
   description: string,
-  defaultLists: { title: string; cards: string[] }[]
+  defaultLists: { title: string; cards: string[] }[],
+  background?: string
 ) {
   const session = await getSession();
   if (!session) throw new Error("Unauthorized");
   const board = await prisma.board.create({
-    data: { title, description, userId: session.userId }
+    data: { title, description, background, userId: session.userId }
   });
 
   for (let i = 0; i < defaultLists.length; i++) {

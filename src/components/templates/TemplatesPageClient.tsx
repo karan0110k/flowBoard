@@ -22,7 +22,7 @@ export default function TemplatesPageClient() {
   const handleUseTemplate = (template: TemplateDefinition) => {
     setLoadingId(template.id);
     startTransition(async () => {
-      const board = await createBoardFromTemplate(template.title, template.description, template.defaultLists);
+      const board = await createBoardFromTemplate(template.title, template.description, template.defaultLists, template.image);
       router.push(`/boards/${board.id}`);
     });
   };
@@ -81,8 +81,10 @@ export default function TemplatesPageClient() {
                   <button
                     key={cat.name}
                     onClick={() => setSelectedCategory(cat.name)}
-                    className={`h-[88px] rounded-2xl bg-gradient-to-br ${cat.color} p-4 cursor-pointer border border-white/10 hover:border-white/20 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 transition-all text-left group relative overflow-hidden`}
+                    className={`h-[88px] rounded-2xl bg-gradient-to-br ${cat.color} p-4 cursor-pointer border border-white/10 hover:border-white/20 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 transition-all text-left group relative overflow-hidden bg-cover bg-center`}
+                    style={cat.image ? { backgroundImage: `url(${cat.image})` } : undefined}
                   >
+                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
                     <span className="text-xl absolute top-2.5 right-3 opacity-25 group-hover:opacity-40 transition-opacity">{cat.icon}</span>
                     <h3 className="text-white font-semibold text-[13px] relative z-10 mt-auto">{cat.name}</h3>
                   </button>
@@ -115,7 +117,10 @@ export default function TemplatesPageClient() {
                     style={{ minHeight: 320 }}
                   >
                     {/* Cover — 60% */}
-                    <div className={`h-[190px] bg-gradient-to-br ${template.background} relative overflow-hidden`}>
+                    <div 
+                      className={`h-[190px] bg-gradient-to-br ${template.background} relative overflow-hidden bg-cover bg-center`}
+                      style={template.image ? { backgroundImage: `url(${template.image})` } : undefined}
+                    >
                       <span className="absolute top-4 right-5 text-3xl opacity-20 group-hover:opacity-35 transition-opacity">{template.icon}</span>
                       <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#282e33]/60 to-transparent" />
                     </div>

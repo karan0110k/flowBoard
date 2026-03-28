@@ -5,7 +5,7 @@ import { Search, Bell, HelpCircle, Plus, LayoutTemplate, LogOut, User, X } from 
 import { logout } from "@/src/lib/auth-actions";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useState, useCallback, useRef, useEffect, useTransition } from "react";
-import { getNotifications, markNotificationAsRead, markAllNotificationsAsRead } from "@/src/lib/actions";
+import { getNotifications, markNotificationAsRead, markAllNotificationsAsRead, createBoard } from "@/src/lib/actions";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
 interface Notification {
@@ -27,6 +27,8 @@ export default function FlowBoardNavbar({ user }: { user?: { name: string; email
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showCreateBoard, setShowCreateBoard] = useState(false);
+  const [newBoardTitle, setNewBoardTitle] = useState("");
   const [, startTransition] = useTransition();
 
   const popupRef = useRef<HTMLDivElement>(null);
@@ -114,12 +116,13 @@ export default function FlowBoardNavbar({ user }: { user?: { name: string; email
           </div>
           <span className="text-lg font-bold tracking-tight text-white hidden sm:inline">FlowBoard</span>
         </Link>
-        <Link href="/dashboard">
-          <button className="hidden sm:flex items-center gap-1 bg-[#0c66e4] hover:bg-[#0a5bc7] text-white h-8 px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer">
-            <Plus className="h-3.5 w-3.5" />
-            Create
-          </button>
-        </Link>
+        <button 
+          onClick={() => { setShowCreateBoard(true); setNewBoardTitle(""); }}
+          className="hidden sm:flex items-center gap-1 bg-[#0c66e4] hover:bg-[#0a5bc7] text-white h-8 px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Create
+        </button>
       </div>
 
       {/* Center - Search */}
@@ -324,6 +327,51 @@ export default function FlowBoardNavbar({ user }: { user?: { name: string; email
               <span className="text-sm text-gray-300">Open shortcuts menu</span>
               <kbd className="bg-white/20 px-2.5 py-1 rounded text-white font-mono text-sm shadow-sm ring-1 ring-white/10">?</kbd>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Board Modal */}
+      <Dialog open={showCreateBoard} onOpenChange={setShowCreateBoard}>
+        <DialogContent className="bg-[#1d2125] border border-white/10 text-white rounded-2xl shadow-3xl max-w-sm p-6">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold">Create Board</DialogTitle>
+          </DialogHeader>
+          <div className="mt-2 space-y-4">
+            <div>
+              <label className="text-xs font-semibold text-gray-400 block mb-1.5">Board title</label>
+              <input
+                autoFocus
+                type="text"
+                value={newBoardTitle}
+                onChange={(e) => setNewBoardTitle(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && newBoardTitle.trim()) {
+                    startTransition(async () => {
+                      const board = await createBoard(newBoardTitle.trim());
+                      setShowCreateBoard(false);
+                      router.push(`/boards/${board.id}`);
+                    });
+                  }
+                }}
+                placeholder="Enter board name"
+                className="w-full h-10 bg-[#22272b] border border-white/10 rounded-lg px-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500/60"
+              />
+            </div>
+            <button
+              onClick={() => {
+                if (!newBoardTitle.trim()) return;
+                startTransition(async () => {
+                  const board = await createBoard(newBoardTitle.trim());
+                  setShowCreateBoard(false);
+                  router.push(`/boards/${board.id}`);
+                });
+              }}
+              disabled={!newBoardTitle.trim()}
+              className="w-full h-9 bg-[#0c66e4] hover:bg-[#0a5bc7] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            >
+              Create
+            </button>
           </div>
         </DialogContent>
       </Dialog>

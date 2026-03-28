@@ -49,7 +49,12 @@ export default function BoardClient({ board, allMembers, allLabels, searchQuery,
 
   useEffect(() => {
     setMounted(true);
-    setLists(board.lists || []);
+  }, []);
+
+  useEffect(() => {
+    if (board.lists) {
+      setLists(board.lists);
+    }
   }, [board.lists]);
 
   if (!mounted) return <div className="flex-1 p-4 h-[calc(100vh-120px)] bg-black/20" />;

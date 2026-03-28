@@ -23,7 +23,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const query = (resolvedSearchParams.q || "").toLowerCase();
 
   const boards = query
-    ? allBoards.filter((b) => b.title.toLowerCase().includes(query))
+    ? allBoards.filter((b: { title: string }) => b.title.toLowerCase().includes(query))
     : allBoards;
 
   const filteredTemplates = query
@@ -86,8 +86,11 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {filteredPopular.map((t) => (
                   <Link key={t.id} href="/templates">
-                    <div className={`h-24 rounded-lg bg-gradient-to-br ${t.background} p-3 cursor-pointer hover:brightness-110 hover:scale-[1.02] transition-all relative overflow-hidden group`}>
-                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
+                    <div 
+                      className={`h-24 rounded-lg bg-gradient-to-br ${t.background} p-3 cursor-pointer hover:brightness-110 hover:scale-[1.02] transition-all relative overflow-hidden group bg-cover bg-center`}
+                      style={t.image ? { backgroundImage: `url(${t.image})` } : undefined}
+                    >
+                      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
                       <span className="text-2xl absolute top-2 right-3 opacity-30 group-hover:opacity-50 transition-opacity">{t.icon}</span>
                       <h3 className="relative text-white font-semibold text-sm z-10">{t.title}</h3>
                     </div>
@@ -113,7 +116,10 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                 {filteredTemplates.map((template) => (
                   <Link key={template.id} href="/templates">
                     <div className="bg-[#282e33] rounded-xl overflow-hidden border border-white/5 hover:border-white/20 transition-all hover:shadow-xl group cursor-pointer">
-                      <div className={`h-20 bg-gradient-to-br ${template.background} relative overflow-hidden`}>
+                      <div 
+                      className={`h-20 bg-gradient-to-br ${template.background} relative overflow-hidden bg-cover bg-center`}
+                      style={template.image ? { backgroundImage: `url(${template.image})` } : undefined}
+                    >
                         <span className="absolute top-2 left-3 text-2xl opacity-40 group-hover:opacity-60 transition-opacity">{template.icon}</span>
                       </div>
                       <div className="p-3">
@@ -135,10 +141,18 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               {query && <span className="text-xs text-gray-500">({boards.length} found)</span>}
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {boards.map((board) => (
-                <div key={board.id} className={`h-24 rounded-lg overflow-hidden relative group bg-gradient-to-br ${board.description && board.description.includes("from-") ? board.description : "from-blue-700 to-purple-800"} p-3 hover:brightness-110 hover:scale-[1.02] transition-all cursor-pointer`}>
+              {boards.map((board: { id: string; title: string; description?: string | null; background?: string | null }) => {
+                const bg = board.background;
+                const isImageUrl = bg && (bg.startsWith("http") || bg.startsWith("data:"));
+                const gradientClass = bg && !isImageUrl ? bg : (board.description && board.description.includes("from-") ? board.description : "from-blue-700 to-purple-800");
+                return (
+                <div 
+                  key={board.id} 
+                  className={`h-24 rounded-lg overflow-hidden relative group bg-gradient-to-br ${gradientClass} p-3 hover:brightness-110 hover:scale-[1.02] transition-all cursor-pointer bg-cover bg-center`}
+                  style={isImageUrl ? { backgroundImage: `url(${bg})` } : undefined}
+                >
                   <Link href={`/boards/${board.id}`} className="absolute inset-0 z-10">
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
                   </Link>
                   <h4 className="relative text-white font-bold text-sm truncate z-20 pointer-events-none">{board.title}</h4>
                   <form action={handleDeleteBoard} className="absolute top-2 right-2 z-30">
@@ -152,7 +166,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                     </button>
                   </form>
                 </div>
-              ))}
+                );
+              })}
 
               {!query && (
                 <form action={handleCreateBoard} className="h-24 relative">

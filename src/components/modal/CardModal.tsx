@@ -29,6 +29,17 @@ const COLORS = [
   "#5e4db2", "#0c66e4", "#206a83", "#4bce97"
 ];
 
+const IMAGE_PRESETS = [
+  "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1522252234503-e356532cafd5?q=80&w=1000&auto=format&fit=crop",
+];
+
 export default function CardModal({ isOpen, onClose, card, boardId, allLists, allMembers, allLabels, currentUserSession }: any) {
   const [description, setDescription] = useState(card?.description || "");
   const [editingTitle, setEditingTitle] = useState(false);
@@ -624,6 +635,17 @@ export default function CardModal({ isOpen, onClose, card, boardId, allLists, al
                         <div className="grid grid-cols-4 gap-2 mb-2">
                           {COLORS.map(c => (
                             <button key={c} onClick={() => handleUpdateCover(c)} className="h-8 rounded cursor-pointer hover:opacity-80 transition-opacity" style={{ backgroundColor: c }} />
+                          ))}
+                        </div>
+                        <div className="text-xs font-semibold text-[#44546f] mb-2 mt-4 block">Images</div>
+                        <div className="grid grid-cols-4 gap-2 mb-2">
+                          {IMAGE_PRESETS.map(url => (
+                            <button 
+                              key={url} 
+                              onClick={() => handleUpdateCover(url)} 
+                              className="h-8 rounded cursor-pointer hover:opacity-80 transition-opacity bg-cover bg-center border border-gray-100" 
+                              style={{ backgroundImage: `url(${url})` }} 
+                            />
                           ))}
                         </div>
                         <div className="text-xs font-semibold text-[#44546f] mb-2 mt-4 block">Image URL</div>
