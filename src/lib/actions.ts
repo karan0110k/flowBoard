@@ -329,18 +329,11 @@ export async function getNotifications() {
         createdAt: new Date(),
       },
       {
-        id: "sample-1",
-        text: "You were added to 'Project Management' board",
-        link: "/dashboard",
+        id: "get-started",
+        text: "Get started with templates — browse ready-made boards to kickstart your projects!",
+        link: "/templates",
         read: false,
-        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 0.5),
-      },
-      {
-        id: "sample-2",
-        text: "Team member assigned you to a new task",
-        link: "/dashboard",
-        read: false,
-        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5),
+        createdAt: new Date(Date.now() - 1000 * 60 * 5),
       }
     ];
   }

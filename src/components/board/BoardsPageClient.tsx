@@ -47,8 +47,11 @@ export default function BoardsPageClient({ boards }: { boards: any[] }) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {filteredPopular.map((t) => (
               <Link key={t.id} href="/templates">
-                <div className={`h-24 rounded-lg bg-gradient-to-br ${t.background} p-3 cursor-pointer hover:brightness-110 hover:scale-[1.02] transition-all relative overflow-hidden group`}>
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
+                <div 
+                  className={`h-24 rounded-lg bg-gradient-to-br ${t.background} p-3 cursor-pointer hover:brightness-110 hover:scale-[1.02] transition-all relative overflow-hidden group bg-cover bg-center`}
+                  style={t.image ? { backgroundImage: `url(${t.image})` } : undefined}
+                >
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
                   <span className="text-2xl absolute top-2 right-3 opacity-30 group-hover:opacity-50 transition-opacity">{t.icon}</span>
                   <h3 className="relative text-white font-semibold text-sm z-10">{t.title}</h3>
                 </div>
@@ -66,14 +69,23 @@ export default function BoardsPageClient({ boards }: { boards: any[] }) {
           {query && <span className="text-xs text-gray-500">({filteredBoards.length} found)</span>}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {filteredBoards.map((board: any) => (
+          {filteredBoards.map((board: any) => {
+            const bg = board.background;
+            const isImageUrl = bg && (bg.startsWith("http") || bg.startsWith("data:"));
+            const gradientClass = bg && !isImageUrl ? bg : (board.description && board.description.includes("from-") ? board.description : "from-blue-700 to-purple-800");
+
+            return (
             <Link key={board.id} href={`/boards/${board.id}`}>
-              <div className={`h-24 rounded-lg bg-gradient-to-br ${board.description && board.description.includes("from-") ? board.description : "from-blue-700 to-purple-800"} p-3 cursor-pointer hover:brightness-110 hover:scale-[1.02] transition-all relative overflow-hidden group`}>
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+              <div 
+                className={`h-24 rounded-lg bg-gradient-to-br ${gradientClass} p-3 cursor-pointer hover:brightness-110 hover:scale-[1.02] transition-all relative overflow-hidden group bg-cover bg-center`}
+                style={isImageUrl ? { backgroundImage: `url(${bg})` } : undefined}
+              >
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
                 <h4 className="relative text-white font-bold text-sm truncate z-10">{board.title}</h4>
               </div>
             </Link>
-          ))}
+            );
+          })}
 
           {!query && (
             <button

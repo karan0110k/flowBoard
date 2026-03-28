@@ -233,7 +233,7 @@ export default function FlowBoardNavbar({ user }: { user?: { name: string; email
                 <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Help & Support</h3>
               </div>
               <button 
-                onClick={() => window.open('https://trello.com/help', '_blank')}
+                onClick={() => { router.push('/help'); setActivePopup(null); }}
                 className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-white/10 transition-colors cursor-pointer"
               >
                 Help Center
@@ -246,13 +246,13 @@ export default function FlowBoardNavbar({ user }: { user?: { name: string; email
                 <span className="text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-gray-400">?</span>
               </button>
               <button 
-                onClick={() => { setActivePopup(null); }} 
+                onClick={() => { router.push('/about'); setActivePopup(null); }} 
                 className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-white/10 transition-colors cursor-pointer"
               >
                 About FlowBoard
               </button>
               <button 
-                onClick={() => window.location.href = 'mailto:support@flowboard.com'}
+                onClick={() => { router.push('/contact'); setActivePopup(null); }}
                 className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-white/10 transition-colors cursor-pointer"
               >
                 Contact Support
