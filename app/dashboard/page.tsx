@@ -195,7 +195,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
 
               {query && boards.length === 0 && (
                 <div className="h-24 rounded-lg flex items-center justify-center bg-white/5 text-gray-500 text-sm">
-                  No boards yet. Click &quot;Create Board&quot; to start."
+                  No boards match your search. Click &quot;Create Board&quot; to start.
                 </div>
               )}
             </div>

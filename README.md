@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-=======
 # FlowBoard 🚀
 
 A modern, full-stack Trello clone built with Next.js, Prisma, and PostgreSQL.
@@ -54,4 +51,3 @@ npx prisma db push
 
 ---
 *Built with ❤️ by FlowBoard Team*
->>>>>>> 7b37706 (Fix build errors and update FlowBoard)
