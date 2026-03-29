@@ -20,14 +20,13 @@ A modern, full-stack Trello clone built with Next.js, Prisma, and PostgreSQL.
 To deploy this project to Vercel, follow these steps:
 
 ### 1. Database Setup
-This project requires a PostgreSQL database. We recommend **[Neon.tech](https://neon.tech/)** or **[Supabase](https://supabase.com/)**.
+This project requires a PostgreSQL database. We used **[Neon.tech](https://neon.tech/)**
 1. Create a new PostgreSQL project.
 2. Copy the **Direct Connection String** (DATABASE_URL).
 
 ### 2. Vercel Configuration
 When importing your repository to Vercel, add the following **Environment Variables**:
-- `DATABASE_URL`: Your PostgreSQL connection string.
-- `JWT_SECRET`: A secure random string for authentication.
+- `DATABASE_URL`: Your PostgreSQL connection string via neon.
 - `NEXT_PUBLIC_APP_URL`: Your full deployment URL (e.g., `https://flowboard.vercel.app`).
 
 ### 3. Build Command
